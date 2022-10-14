@@ -1,6 +1,6 @@
 resource "aws_security_group" "node_group_one" {
   name_prefix = "node_group_one"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = data.aws_vpc.main.id
 
   ingress {
     from_port = 22
@@ -8,22 +8,8 @@ resource "aws_security_group" "node_group_one" {
     protocol  = "tcp"
 
     cidr_blocks = [
-      "10.0.0.0/8",
+      cidrsubnet(data.aws_vpc.main.cidr_block, 4, 1),
     ]
   }
 }
 
-resource "aws_security_group" "node_group_two" {
-  name_prefix = "node_group_two"
-  vpc_id      = module.vpc.vpc_id
-
-  ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
-
-    cidr_blocks = [
-      "192.168.0.0/16",
-    ]
-  }
-}
